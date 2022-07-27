@@ -1,3 +1,4 @@
+
 from pymongo import MongoClient
 import time
 import requests
@@ -11,9 +12,10 @@ loadQuery = "ddd"
 
 def execute():
     print('executing full etl pipeline')
-    extract()
-    transform()
-    load()
+    #extract()
+    getKPIs()
+    #transform()
+    #load()
 
 
 def extract():
@@ -40,6 +42,42 @@ def extract():
     #cursors
     #parse response
     #place into mongo #abstract database connection to repository layer
+
+
+
+def getKPIs():
+    print("Calculating KPIs for DataCite")
+    client = MongoClient("mongodb://superuser:AgainstMake1nsect@149.155.16.39/")
+    db = client["TestDB"]
+    col = db['DataCiteRAW']
+    #start_time = time.time()
+    #publicationCountByYear = col.find({"attributes.publicationYear": 2022})
+    #count = publicationCountByYear.collection.count_documents()
+    #print("PubliationCountByYearType is " + str(count))
+    publicationCountByYear = col.aggregate([
+                                                {
+                                                    "$group" : {
+                                                    "_id" : { 
+                                                        "$year": {"$dateFromString": {
+                                                            "dateString": "$attributes.created"
+                                                            } }
+                                                        }, 
+                                                        "num_datasets" : {"$sum" :1}
+                                                        }
+                                                    },
+                                                {"$sort" : {"_id" :1}}
+                                           ])
+
+    print("Year " + str(publicationCountByYear.next()))
+    print("Year " + str(publicationCountByYear.next()))
+    print("Year " + str(publicationCountByYear.next()))
+    print("Year " + str(publicationCountByYear.next()))
+    print("Year " + str(publicationCountByYear.next()))
+    print("Year " + str(publicationCountByYear.next()))
+    print("Year " + str(publicationCountByYear.next()))
+    print("Year " + str(publicationCountByYear.next()))
+    #Count by Source/Client
+    #Count by Year then by Clienty
 
 
 def transform():
