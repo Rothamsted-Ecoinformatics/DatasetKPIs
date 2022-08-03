@@ -1,0 +1,717 @@
+{
+  "createdon": "some date",
+  "datasources": {
+    "datacite": {
+      "publicationCountByYear": [
+        {
+          "_id": 2012,
+          "num_datasets": 1
+        },
+        {
+          "_id": 2013,
+          "num_datasets": 1
+        },
+        {
+          "_id": 2015,
+          "num_datasets": 14
+        },
+        {
+          "_id": 2016,
+          "num_datasets": 13
+        },
+        {
+          "_id": 2017,
+          "num_datasets": 95
+        },
+        {
+          "_id": 2018,
+          "num_datasets": 35
+        },
+        {
+          "_id": 2019,
+          "num_datasets": 39
+        },
+        {
+          "_id": 2020,
+          "num_datasets": 63
+        },
+        {
+          "_id": 2021,
+          "num_datasets": 29
+        },
+        {
+          "_id": 2022,
+          "num_datasets": 54
+        }
+      ],
+      "publicationCountByPublisher": [
+        {
+          "_id": "cern.zenodo",
+          "num_datasets": 141
+        },
+        {
+          "_id": "bl.rothres",
+          "num_datasets": 63
+        },
+        {
+          "_id": "bl.nerc",
+          "num_datasets": 53
+        },
+        {
+          "_id": "gbif.gbif",
+          "num_datasets": 33
+        },
+        {
+          "_id": "figshare.ars",
+          "num_datasets": 24
+        },
+        {
+          "_id": "gdcc.harvard-dv",
+          "num_datasets": 8
+        },
+        {
+          "_id": "dryad.dryad",
+          "num_datasets": 5
+        },
+        {
+          "_id": "bl.f1000r",
+          "num_datasets": 5
+        },
+        {
+          "_id": "gdcc.icraf",
+          "num_datasets": 4
+        },
+        {
+          "_id": "bl.mendeley",
+          "num_datasets": 2
+        },
+        {
+          "_id": "bl.reading",
+          "num_datasets": 1
+        },
+        {
+          "_id": "bl.bristol",
+          "num_datasets": 1
+        },
+        {
+          "_id": "rg.rg",
+          "num_datasets": 1
+        },
+        {
+          "_id": "bl.stfc",
+          "num_datasets": 1
+        },
+        {
+          "_id": "cdl.ucsb",
+          "num_datasets": 1
+        },
+        {
+          "_id": "bl.cabi",
+          "num_datasets": 1
+        }
+      ],
+      "publicationCountByYearByClient": [
+        {
+          "_id": {
+            "year": 2012,
+            "client": "cdl.ucsb"
+          },
+          "num_datasets": 1
+        },
+        {
+          "_id": {
+            "year": 2013,
+            "client": "bl.nerc"
+          },
+          "num_datasets": 1
+        },
+        {
+          "_id": {
+            "year": 2015,
+            "client": "bl.nerc"
+          },
+          "num_datasets": 14
+        },
+        {
+          "_id": {
+            "year": 2016,
+            "client": "figshare.ars"
+          },
+          "num_datasets": 6
+        },
+        {
+          "_id": {
+            "year": 2016,
+            "client": "bl.nerc"
+          },
+          "num_datasets": 4
+        },
+        {
+          "_id": {
+            "year": 2016,
+            "client": "dryad.dryad"
+          },
+          "num_datasets": 2
+        },
+        {
+          "_id": {
+            "year": 2016,
+            "client": "rg.rg"
+          },
+          "num_datasets": 1
+        },
+        {
+          "_id": {
+            "year": 2017,
+            "client": "cern.zenodo"
+          },
+          "num_datasets": 70
+        },
+        {
+          "_id": {
+            "year": 2017,
+            "client": "bl.nerc"
+          },
+          "num_datasets": 16
+        },
+        {
+          "_id": {
+            "year": 2017,
+            "client": "gdcc.harvard-dv"
+          },
+          "num_datasets": 3
+        },
+        {
+          "_id": {
+            "year": 2017,
+            "client": "figshare.ars"
+          },
+          "num_datasets": 3
+        },
+        {
+          "_id": {
+            "year": 2017,
+            "client": "bl.reading"
+          },
+          "num_datasets": 1
+        },
+        {
+          "_id": {
+            "year": 2017,
+            "client": "dryad.dryad"
+          },
+          "num_datasets": 1
+        },
+        {
+          "_id": {
+            "year": 2017,
+            "client": "bl.f1000r"
+          },
+          "num_datasets": 1
+        },
+        {
+          "_id": {
+            "year": 2018,
+            "client": "bl.rothres"
+          },
+          "num_datasets": 17
+        },
+        {
+          "_id": {
+            "year": 2018,
+            "client": "gdcc.harvard-dv"
+          },
+          "num_datasets": 5
+        },
+        {
+          "_id": {
+            "year": 2018,
+            "client": "figshare.ars"
+          },
+          "num_datasets": 5
+        },
+        {
+          "_id": {
+            "year": 2018,
+            "client": "cern.zenodo"
+          },
+          "num_datasets": 4
+        },
+        {
+          "_id": {
+            "year": 2018,
+            "client": "bl.nerc"
+          },
+          "num_datasets": 2
+        },
+        {
+          "_id": {
+            "year": 2018,
+            "client": "bl.bristol"
+          },
+          "num_datasets": 1
+        },
+        {
+          "_id": {
+            "year": 2018,
+            "client": "bl.f1000r"
+          },
+          "num_datasets": 1
+        },
+        {
+          "_id": {
+            "year": 2019,
+            "client": "cern.zenodo"
+          },
+          "num_datasets": 14
+        },
+        {
+          "_id": {
+            "year": 2019,
+            "client": "bl.nerc"
+          },
+          "num_datasets": 12
+        },
+        {
+          "_id": {
+            "year": 2019,
+            "client": "bl.rothres"
+          },
+          "num_datasets": 7
+        },
+        {
+          "_id": {
+            "year": 2019,
+            "client": "bl.f1000r"
+          },
+          "num_datasets": 3
+        },
+        {
+          "_id": {
+            "year": 2019,
+            "client": "figshare.ars"
+          },
+          "num_datasets": 2
+        },
+        {
+          "_id": {
+            "year": 2019,
+            "client": "bl.stfc"
+          },
+          "num_datasets": 1
+        },
+        {
+          "_id": {
+            "year": 2020,
+            "client": "cern.zenodo"
+          },
+          "num_datasets": 44
+        },
+        {
+          "_id": {
+            "year": 2020,
+            "client": "bl.rothres"
+          },
+          "num_datasets": 10
+        },
+        {
+          "_id": {
+            "year": 2020,
+            "client": "figshare.ars"
+          },
+          "num_datasets": 6
+        },
+        {
+          "_id": {
+            "year": 2020,
+            "client": "bl.nerc"
+          },
+          "num_datasets": 2
+        },
+        {
+          "_id": {
+            "year": 2020,
+            "client": "dryad.dryad"
+          },
+          "num_datasets": 1
+        },
+        {
+          "_id": {
+            "year": 2021,
+            "client": "bl.rothres"
+          },
+          "num_datasets": 15
+        },
+        {
+          "_id": {
+            "year": 2021,
+            "client": "cern.zenodo"
+          },
+          "num_datasets": 6
+        },
+        {
+          "_id": {
+            "year": 2021,
+            "client": "gdcc.icraf"
+          },
+          "num_datasets": 4
+        },
+        {
+          "_id": {
+            "year": 2021,
+            "client": "bl.mendeley"
+          },
+          "num_datasets": 2
+        },
+        {
+          "_id": {
+            "year": 2021,
+            "client": "bl.cabi"
+          },
+          "num_datasets": 1
+        },
+        {
+          "_id": {
+            "year": 2021,
+            "client": "bl.nerc"
+          },
+          "num_datasets": 1
+        },
+        {
+          "_id": {
+            "year": 2022,
+            "client": "gbif.gbif"
+          },
+          "num_datasets": 33
+        },
+        {
+          "_id": {
+            "year": 2022,
+            "client": "bl.rothres"
+          },
+          "num_datasets": 14
+        },
+        {
+          "_id": {
+            "year": 2022,
+            "client": "cern.zenodo"
+          },
+          "num_datasets": 3
+        },
+        {
+          "_id": {
+            "year": 2022,
+            "client": "figshare.ars"
+          },
+          "num_datasets": 2
+        },
+        {
+          "_id": {
+            "year": 2022,
+            "client": "dryad.dryad"
+          },
+          "num_datasets": 1
+        },
+        {
+          "_id": {
+            "year": 2022,
+            "client": "bl.nerc"
+          },
+          "num_datasets": 1
+        }
+      ]
+    },
+    "zenodo": {
+      "downloadsByDataType": [
+        {
+          "_id": "dataset",
+          "count": 55,
+          "downloads": 34175.0
+        },
+        {
+          "_id": "software",
+          "count": 14,
+          "downloads": 217.0
+        }
+      ],
+      "downloadsByTitle": {
+        "1": {
+          "title": "Data from: Heterologous expression and transcript analysis of gibberellin biosynthetic genes of grasses reveals novel functionality in the GA3ox family.",
+          "downloads": 0.0
+        },
+        "2": {
+          "title": "Rothamsted/knetmaps.js: v1.0.8",
+          "downloads": 6.0
+        },
+        "0": {
+          "title": "The Pathogen-Host Interactions Database, version 4.12",
+          "downloads": 26.0
+        },
+        "3": {
+          "title": "Data from: Evolutionary trade-offs of insecticide resistance \u2013 the fitness costs associated with target-site mutations in the nAChR of Drosophila melanogaster",
+          "downloads": 3.0
+        },
+        "4": {
+          "title": "Data from: Evidence for a pervasive 'idling-mode' activity template in flying and pedestrian insects",
+          "downloads": 0.0
+        },
+        "5": {
+          "title": "CropSequenceGenerator",
+          "downloads": 6.0
+        },
+        "6": {
+          "title": "Data from: Variability in commercial demand for tree saplings affects the probability of introducing exotic forest diseases",
+          "downloads": 0.0
+        },
+        "7": {
+          "title": "Data from: An exceptionally high nucleotide and haplotype diversity and a signature of positive selection for the eIF4E resistance gene in barley are revealed by allele mining and phylogenetic analyses of natural populations.",
+          "downloads": 0.0
+        },
+        "8": {
+          "title": "Data from: Integrating regulatory surveys and citizen science to map outbreaks of forest diseases: acute oak decline in England and Wales",
+          "downloads": 2.0
+        },
+        "9": {
+          "title": "Data from: Genome-wide transcriptional signatures of migratory flight activity in a globally invasive insect pest",
+          "downloads": 2.0
+        },
+        "10": {
+          "title": "Data from: Mass seasonal bioflows of high-flying insect migrants",
+          "downloads": 1.0
+        },
+        "11": {
+          "title": "Data from: Insecticide resistance mediated by an exon skipping event",
+          "downloads": 2.0
+        },
+        "12": {
+          "title": "LARS-WG stochastic weather generator",
+          "downloads": 11.0
+        },
+        "13": {
+          "title": "Sirius wheat model",
+          "downloads": 2.0
+        },
+        "14": {
+          "title": "Rothamsted/CBS-Dispersal-Model: CBS-Dispersal-Model v1.0.0",
+          "downloads": 18.0
+        },
+        "15": {
+          "title": "hmetcalfe1/CropSequenceGenerator: CropSequenceGenerator",
+          "downloads": 0.0
+        },
+        "16": {
+          "title": "ACE: Application for Conditional probability Elicitation",
+          "downloads": 11.0
+        },
+        "17": {
+          "title": "SharpRT/NFRR_Philippines: NFRR_Philippines",
+          "downloads": 1.0
+        },
+        "18": {
+          "title": "hmetcalfe1/BGmodel: BGmodel",
+          "downloads": 1.0
+        },
+        "19": {
+          "title": "Rothamsted/knetminer: 5.0",
+          "downloads": 1.0
+        },
+        "20": {
+          "title": "Data from: Contrasting population structure and demographic history of cereal aphids in different environmental and agricultural landscapes",
+          "downloads": 9.0
+        },
+        "21": {
+          "title": "Rothamsted/covid19-kg: First COVID-19 KG release",
+          "downloads": 1.0
+        },
+        "22": {
+          "title": "Sirius crop model",
+          "downloads": 18.0
+        },
+        "23": {
+          "title": "LARS-WG stochastic weather generator",
+          "downloads": 110.0
+        },
+        "24": {
+          "title": "Data from: Long-term shifts in the seasonal abundance of adult Culicoides biting midges and their impact on the potential for arbovirus outbreaks",
+          "downloads": 1.0
+        },
+        "25": {
+          "title": "Data from: Estimation of bumblebee queen dispersal distances using sibship reconstruction method",
+          "downloads": 0.0
+        },
+        "26": {
+          "title": "The effect of competition on the control of invading plant pathogens",
+          "downloads": 5.0
+        },
+        "27": {
+          "title": "Data from: Modest enhancements to conventional grassland diversity improve the provision of pollination services",
+          "downloads": 3.0
+        },
+        "28": {
+          "title": "Data on where and why species' range shifts are hampered by unsuitable landscapes: for moth species in Great Britain",
+          "downloads": 7.0
+        },
+        "29": {
+          "title": "PHI-base/phipo: 2022-07-29 July release",
+          "downloads": 0.0
+        },
+        "30": {
+          "title": "iSDAsoil: soil extractable Aluminium for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 247.0
+        },
+        "31": {
+          "title": "Livestock in diverse cropping systems improve weed management and sustain yields whilst reducing inputs",
+          "downloads": 24.0
+        },
+        "32": {
+          "title": "Data from: Higher flight activity in the offspring of migrants compared to residents in a migratory insect",
+          "downloads": 7.0
+        },
+        "33": {
+          "title": "Data from: Adaptive strategies in nocturnally migrating insects and songbirds: contrasting responses to wind",
+          "downloads": 0.0
+        },
+        "34": {
+          "title": "Density independent prey choice, taxonomy, life history and web characteristics determine the diet and biocontrol potential of spiders (Linyphiidae and Lycosidae) in cereal crops - Dataset",
+          "downloads": 38.0
+        },
+        "35": {
+          "title": "BRAVO target sequence capture V3",
+          "downloads": 5.0
+        },
+        "36": {
+          "title": "iSDAsoil: soil clay content (USDA system) for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 605.0
+        },
+        "37": {
+          "title": "iSDAsoil: soil extractable Potassium for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 369.0
+        },
+        "38": {
+          "title": "iSDAsoil: soil texture class (USDA system) for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 693.0
+        },
+        "39": {
+          "title": "iSDAsoil: soil extractable Calcium for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 279.0
+        },
+        "40": {
+          "title": "iSDAsoil: soil total organic Nitrogen for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 674.0
+        },
+        "41": {
+          "title": "iSDAsoil: soil extractable Zinc for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 171.0
+        },
+        "42": {
+          "title": "iSDAsoil: soil organic carbon for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 5483.0
+        },
+        "43": {
+          "title": "iSDAsoil: soil fine-earth bulk density for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 324.0
+        },
+        "44": {
+          "title": "iSDAsoil: soil sand content (USDA system) for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 421.0
+        },
+        "45": {
+          "title": "iSDAsoil: soil silt content (USDA system) for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 349.0
+        },
+        "46": {
+          "title": "iSDAsoil: soil extractable Phosphorus for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 231.0
+        },
+        "47": {
+          "title": "iSDAsoil: soil total Carbon for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 17045.0
+        },
+        "48": {
+          "title": "iSDAsoil: soil extractable Sulphur for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 153.0
+        },
+        "49": {
+          "title": "iSDAsoil: soil extractable Iron for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 238.0
+        },
+        "50": {
+          "title": "iSDAsoil: soil extractable Magnesium for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 233.0
+        },
+        "51": {
+          "title": "iSDAsoil: soil pH for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 538.0
+        },
+        "52": {
+          "title": "iSDAsoil: soil stone content for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 501.0
+        },
+        "53": {
+          "title": "iSDAsoil: soil effective Cation Exchange Capacity (eCEC) for Africa predicted at 30 m resolution at 0-20 and 20-50 cm depths",
+          "downloads": 224.0
+        },
+        "54": {
+          "title": "Data from: Engineering a plant community to deliver multiple ecosystem services",
+          "downloads": 3.0
+        },
+        "55": {
+          "title": "Evidence for nutrient-specific foraging of predators under field conditions",
+          "downloads": 42.0
+        },
+        "56": {
+          "title": "Data from: Simple measures of climate, soil properties and plant traits predict national scale grassland soil carbon stocks",
+          "downloads": 3.0
+        },
+        "57": {
+          "title": "ArcGIS wheat grain protein distribution analysis toolbox",
+          "downloads": 39.0
+        },
+        "58": {
+          "title": "Eco-evolutionary outsiders: establishing in a distantly related neighbourhood delays and reorganizes nutrient recycling",
+          "downloads": 11.0
+        },
+        "59": {
+          "title": "Data from: Comparative genomics to explore phylogenetic relationship, cryptic sexual potential and host specificity of Rhynchosporium species on grasses",
+          "downloads": 0.0
+        },
+        "60": {
+          "title": "Do ecological specialization and functional traits explain the abundance\u2013frequency relationship? Arable weeds as a case study",
+          "downloads": 10.0
+        },
+        "61": {
+          "title": "Data from: Plant, soil and microbial controls on grassland diversity restoration: a long-term, multi-site mesocosm experiment",
+          "downloads": 1.0
+        },
+        "62": {
+          "title": "Data from: Climate forcing of an emerging pathogenic fungus across a montane multi-host community",
+          "downloads": 6.0
+        },
+        "63": {
+          "title": "Data from: Differential gene expression according to race and host plant in the pea aphid",
+          "downloads": 4.0
+        },
+        "64": {
+          "title": "Database of weeds in cultivation fields of France and UK, with ecological and biogeographical information",
+          "downloads": 4255.0
+        },
+        "65": {
+          "title": "Data from: Functional biogeography of weeds reveals how anthropogenic management blurs trait-climate relationships",
+          "downloads": 19.0
+        },
+        "66": {
+          "title": "Supplementary material for 'Revealing patterns of nocturnal migration using the European weather radar network'",
+          "downloads": 813.0
+        },
+        "67": {
+          "title": "TGRAINS: CSA Twitter database - Periphery Database",
+          "downloads": 32.0
+        },
+        "68": {
+          "title": "TGRAINS: CSA Twitter database - Core Database",
+          "downloads": 55.0
+        }
+      }
+    }
+  }
+}

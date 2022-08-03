@@ -1,97 +1,131 @@
-
-from pymongo import MongoClient
 import time
 import requests
 import json
-
-url = 'https://api.datacite.org/dois'
-payload = {'query': 'Rothamsted AND types.resourceTypeGeneral: (Dataset OR Model OR Other OR Software)','page[size]': '1000'}
-
-transformSourceQuery = "ddd"
-loadQuery = "ddd"
-
-def execute():
-    print('executing full etl pipeline')
-    #extract()
-    getKPIs()
-    #transform()
-    #load()
+from bson.json_util import dumps
 
 
-def extract():
+class DataCiteETL: #, IDataSource
+    def __init__(self, regData, mdb):
+        self.regData = regData
+        self.mdb = mdb
+        self.col = self.mdb.getcollection(self.regData["name"])
+        self.clients = {
+                "cern.zenodo": "Zenodo",
+                "bl.rothres": "Rothamsted Research",
+                "bl.nerc": "NERC Environmental Data Service",
+                "gbif.gbif": "Global Biodiversity Information Facility",
+                "figshare.ars": "figshare Academic Research System",
+                "gdcc.harvard-dv":"Harvard Dataverse",
+                "bl.f1000r": "Faculty of 1000 Research Ltd",
+                "dryad.dryad": "DRYAD",
+                "gdcc.icraf": "International Centre for Research in Agroforestry (ICRAF)",
+                "bl.mendeley": "Mendeley Data",
+                "rg.rg": "ResearchGate",
+                "bl.stfc": "Science and Technology Facilities Council",
+                "bl.cabi": "Centre for Agriculture and Biosciences International",
+                "bl.bristol": "University of Bristol",
+                "cdl.ucsb": "KNB Data Repository",
+                "bl.reading": "University of Reading",
+            }
 
-    start_time = time.time()
-    print('extract datacite data from API')
+    def executeETL(self):
+        print('executing full etl pipeline')
+        self.extract()
+        #getKPIs(regData)
+        #transform()
+        #load()
 
-    #connect to mongo
-    client = MongoClient("mongodb://superuser:AgainstMake1nsect@149.155.16.39/")
-    db = client["TestDB"]
-    collection = db['DataCiteRAW']
-    collection.delete_many({}) 
-    #call api
-    response = requests.get(url, params=payload)
-    #print(response.json())
-    kpi_data = json.loads(response.text)
+    def executeKPI(self):
+        #self.getKPIs()
+        y = self.getPublicationCountByYear()
+        p = self.getPublicationCountByPublisher()
+        yc = self.getPublicationCountByYearByClient()
+        result = {
+                "publicationCountByYear": list(y),
+                "publicationCountByPublisher": list(p),
+                "publicationCountByYearByClient": list(yc)
+                }
+        return result
 
-    i = 1
-    for data in kpi_data['data']:
-        
-        print("Dataset " + str(i) + ". type = " + str(type(data)))
-        collection.insert_one(data)
-        i+=1
-    #cursors
-    #parse response
-    #place into mongo #abstract database connection to repository layer
+    def extract(self):
+        start_time = time.time()
+        response = requests.get(self.regData["apiurl"], params=self.regData["payload"])
+        kpi_data = json.loads(response.text)
 
+        datasets = []
+        i = 1
+        for dataset in kpi_data['data']:
+            
+            ##print("Dataset " + str(i) + ". type = " + str(type(dataset)))
+            datasets.append(dataset)
+            i+=1
+    
+        print("saving many from " + self.regData["name"])
+        self.mdb.saveMany(self.regData["name"], datasets)
 
-
-def getKPIs():
-    print("Calculating KPIs for DataCite")
-    client = MongoClient("mongodb://superuser:AgainstMake1nsect@149.155.16.39/")
-    db = client["TestDB"]
-    col = db['DataCiteRAW']
-    #start_time = time.time()
-    #publicationCountByYear = col.find({"attributes.publicationYear": 2022})
-    #count = publicationCountByYear.collection.count_documents()
-    #print("PubliationCountByYearType is " + str(count))
-    publicationCountByYear = col.aggregate([
-                                                {
-                                                    "$group" : {
-                                                    "_id" : { 
-                                                        "$year": {"$dateFromString": {
-                                                            "dateString": "$attributes.created"
-                                                            } }
-                                                        }, 
-                                                        "num_datasets" : {"$sum" :1}
-                                                        }
-                                                    },
-                                                {"$sort" : {"_id" :1}}
-                                           ])
-
-    print("Year " + str(publicationCountByYear.next()))
-    print("Year " + str(publicationCountByYear.next()))
-    print("Year " + str(publicationCountByYear.next()))
-    print("Year " + str(publicationCountByYear.next()))
-    print("Year " + str(publicationCountByYear.next()))
-    print("Year " + str(publicationCountByYear.next()))
-    print("Year " + str(publicationCountByYear.next()))
-    print("Year " + str(publicationCountByYear.next()))
-    #Count by Source/Client
-    #Count by Year then by Clienty
+    def getPublicationCountByYear(self):
+        publicationCountByYear = self.col.aggregate([
+                                                    {
+                                                        "$group" : {
+                                                        "_id" : { 
+                                                            "$year": {"$dateFromString": 
+                                                                {
+                                                                "dateString": "$attributes.created"
+                                                                } 
+                                                            }
+                                                            }, 
+                                                            "num_datasets" : {"$sum" :1}
+                                                            }
+                                                        },
+                                                    {"$sort" : {"_id" :1}}
+                                            ])
+        #for x in publicationCountByYear:
+         #   print(x)
+        return publicationCountByYear
 
 
-def transform():
-    print('grab datacite from MONGO and transform')
-    client = MongoClient("mongodb://superuser:AgainstMake1nsect@149.155.16.39/")
-    db = client["TestDB"]
-    collection = db['DataCiteRAW']
-    #start_time = time.time()
-    results = collection.find()
-    #read fromdatabase
-    #transform
-    #load into staging table 
+    def getPublicationCountByPublisher(self):
+        publicationCountByPublisher = self.col.aggregate([
+                                                    {
+                                                        "$group" : {
+                                                        "_id" : "$relationships.client.data.id", 
+                                                            "num_datasets" : {"$sum" :1}
+                                                            }
+                                                        },
+                                                    {"$sort" : {"num_datasets" :-1}}
+                                            ])
+        return publicationCountByPublisher
 
-def load():
-    print('load datacite data from staging to datamart')
-    #copy from staging to datamart tables
-    #truncate staging tables
+    def getPublicationCountByYearByClient(self):
+        start_time = time.time()
+        publicationCountByYearByClient = self.col.aggregate([
+                                                    {
+                                                        "$group" : {
+                                                        "_id" : { 
+                                                            "year": {"$year": {"$dateFromString": 
+                                                                {
+                                                                "dateString": "$attributes.created"
+                                                                } 
+                                                            }},
+                                                            "client": "$relationships.client.data.id"
+                                                            }, 
+                                                            "num_datasets" : {"$sum" :1}
+                                                            }
+                                                        },
+                                                    {"$sort" : {"_id.year" :1, "num_datasets": -1}}
+                                            ])
+        return publicationCountByYearByClient
+
+
+    def transform(self):
+        #start_time = time.time()
+        results = self.col.find()
+        #read fromdatabase
+        #transform
+        #load into staging table 
+
+    def load(self):
+        print('load datacite data from staging to datamart')
+        #copy from staging to datamart tables
+        #truncate staging tables
+

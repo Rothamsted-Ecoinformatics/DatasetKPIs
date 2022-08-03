@@ -1,0 +1,19 @@
+{
+    "datasources": [
+        {
+            "name": "datacite",
+            "apiurl": "https://api.datacite.org/dois",
+            "payload": {
+                "query": "Rothamsted AND types.resourceTypeGeneral: (Dataset OR Model OR Other OR Software)",
+                "page[size]": 1000}
+        },
+        {
+            "name": "zenodo",
+            "apiurl": "https://zenodo.org/api/records",
+            "payload": {
+                "q": "creators.affiliation:Rothamsted AND resource_type.type:(dataset OR software)",
+                "size":1000
+                }
+        }
+    ]
+}
