@@ -10,10 +10,20 @@ listing = db.command('usersInfo')
 for x in listing['users']:
     print(x)
 
-# db.command(
-#     'createUser', 'datasetAppUser', 
-#     pwd='Dollar1slandfarm',
-#     roles=[{'role': 'readWrite', 'db': 'PublishedDatasets'}]
-# )
+#creating datasetAPP user
+#db.command(
+#    'createUser', 'datasetAppUser', 
+#    pwd='Dollar1slandfarm',
+#    roles=[{'role': 'readWrite', 'db': 'PublishedDatasets'}]
+#)
+
+#creating datasetAPP user
+#db.command(
+#    'createUser', 'pdReadOnlyUser', 
+#    pwd='TriedJup1terplains',
+#    roles=[{'role': 'read', 'db': 'PublishedDatasets'}]
+#)
+
+
 
 

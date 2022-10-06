@@ -1,24 +1,33 @@
+from datetime import datetime
 import json
 import csv
 from data.mongo import MongoRepository as mdb
-from sources.datacite.dataciteETL import DataCiteETL as dc
-from sources.zenodo.zenodoETL import ZenodoETL as zen
+from etlloaders.dataciteETL import DataCiteETL as dc
+from etlloaders.zenodoETL import ZenodoETL as zen
 
+
+##TODO: REFACTOR TO USE REGISTRY LOOP
+#SETUP
 registry = open('src/registry.json')
 registrydata = json.load(registry)
 mongodb = mdb()
+
 
 dc = dc(registrydata["datasources"][0], mongodb)
 dcresults = dc.executeKPI()
 zen = zen(registrydata["datasources"][1], mongodb)
 zenresults = zen.executeKPI()
 
+
 #CREATE CSV
-file = open('src/kpiData.json','w+')
+date = datetime.now().strftime("%Y_%m_%d-%I-%M-%S_%p")
+print(f"filename_{date}")
+
+file = open(f"src/archive/kpiData{date}.json" ,'w')
 
 #WRITE JSON
 jsondata = {
-    "createdon": "some date",
+    "createdon": date,
     "datasources":
                     {
                     "datacite": dcresults,

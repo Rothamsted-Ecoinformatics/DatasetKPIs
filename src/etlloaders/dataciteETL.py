@@ -49,18 +49,20 @@ class DataCiteETL: #, IDataSource
 
     def extract(self):
         start_time = time.time()
+        ##use api url and payload data from the registry to get raw data
+        print("apiurl : " + self.regData["apiurl"])
+        print("payload : " + str(self.regData["payload"]))
         response = requests.get(self.regData["apiurl"], params=self.regData["payload"])
         kpi_data = json.loads(response.text)
 
+        ##Granularity: split the results up into individual datasets.
         datasets = []
         i = 1
         for dataset in kpi_data['data']:
-            
-            ##print("Dataset " + str(i) + ". type = " + str(type(dataset)))
             datasets.append(dataset)
             i+=1
-    
-        print("saving many from " + self.regData["name"])
+
+        ##Save all the datasets to the correct collection (overwrites existing).    
         self.mdb.saveMany(self.regData["name"], datasets)
 
     def getPublicationCountByYear(self):
@@ -82,7 +84,6 @@ class DataCiteETL: #, IDataSource
         #for x in publicationCountByYear:
          #   print(x)
         return publicationCountByYear
-
 
     def getPublicationCountByPublisher(self):
         publicationCountByPublisher = self.col.aggregate([
@@ -115,7 +116,6 @@ class DataCiteETL: #, IDataSource
                                                     {"$sort" : {"_id.year" :1, "num_datasets": -1}}
                                             ])
         return publicationCountByYearByClient
-
 
     def transform(self):
         #start_time = time.time()
