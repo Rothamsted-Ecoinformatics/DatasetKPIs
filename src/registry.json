@@ -7,14 +7,6 @@
                 "query": "Rothamsted AND types.resourceTypeGeneral: (Dataset OR Model OR Other OR Software)",
                 "page[size]": 1000
             }
-        },
-        {
-            "name": "Zenodo",
-            "apiurl": "https://zenodo.org/api/records",
-            "payload": {
-                "q": "creators.affiliation:Rothamsted AND resource_type.type:(dataset OR software)",
-                "size": 1000
-            }
         }
     ]
 }

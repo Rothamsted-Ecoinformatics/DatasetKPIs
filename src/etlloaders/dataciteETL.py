@@ -8,7 +8,8 @@ class DataCiteETL: #, IDataSource
     def __init__(self, regData, mdb):
         self.regData = regData
         self.mdb = mdb
-        self.col = self.mdb.getcollection(self.regData["name"])
+        self.rawcol = self.mdb.getcollection(self.regData["name"], "raw") #rawcollection
+        self.stagingcol = self.mdb.getcollection(self.regData["name"], "staging") #rawcollection
         self.clients = {
                 "cern.zenodo": "Zenodo",
                 "bl.rothres": "Rothamsted Research",
@@ -29,10 +30,11 @@ class DataCiteETL: #, IDataSource
             }
 
     def executeETL(self):
-        print('executing full etl pipeline')
-        self.extract()
+        print('executing full etl pipeline for ' + self.regData["name"])
+        #self.extract()
+        
         #getKPIs(regData)
-        #transform()
+        self.transform()
         #load()
 
     def executeKPI(self):
@@ -63,10 +65,10 @@ class DataCiteETL: #, IDataSource
             i+=1
 
         ##Save all the datasets to the correct collection (overwrites existing).    
-        self.mdb.saveMany(self.regData["name"], datasets)
+        self.mdb.saveMany(self.regData["name"], datasets, "raw")
 
     def getPublicationCountByYear(self):
-        publicationCountByYear = self.col.aggregate([
+        publicationCountByYear = self.rawcol.aggregate([
                                                     {
                                                         "$group" : {
                                                         "_id" : { 
@@ -86,7 +88,7 @@ class DataCiteETL: #, IDataSource
         return publicationCountByYear
 
     def getPublicationCountByPublisher(self):
-        publicationCountByPublisher = self.col.aggregate([
+        publicationCountByPublisher = self.rawcol.aggregate([
                                                     {
                                                         "$group" : {
                                                         "_id" : "$relationships.client.data.id", 
@@ -99,7 +101,7 @@ class DataCiteETL: #, IDataSource
 
     def getPublicationCountByYearByClient(self):
         start_time = time.time()
-        publicationCountByYearByClient = self.col.aggregate([
+        publicationCountByYearByClient = self.rawcol.aggregate([
                                                     {
                                                         "$group" : {
                                                         "_id" : { 
@@ -116,13 +118,30 @@ class DataCiteETL: #, IDataSource
                                                     {"$sort" : {"_id.year" :1, "num_datasets": -1}}
                                             ])
         return publicationCountByYearByClient
+    
 
     def transform(self):
         #start_time = time.time()
-        results = self.col.find()
+        #at this point self.stagingcol.find() is empty when the class is initialised
+        initialData = self.rawcol.find()
+        self.mdb.saveMany(self.regData["name"], initialData, "staging")
+        #at this point... the collection in the db is full, but self.stagingcol is still empty... 
+        #so the filter would not work if using self.staging col. 
+        #self.stagingcol = self.mdb.getcollection(self.regData["name"], "staging")
+        #now we have 'reinitialised' self.staging col. 
+        print("starting Filter")
+        self.FilterTest()
+        #self.FilterTest2()
+        #self.FilterTest3()
         #read fromdatabase
-        #transform
+
         #load into staging table 
+
+    def FilterTest(self):
+        filteredResults = self.stagingcol.find({ "attributes.creators.affiliation": {"$regex" : "(?i)(Rothamsted)"} })
+        self.mdb.saveMany(self.regData["name"], filteredResults, "staging")
+        pass
+
 
     def load(self):
         print('load datacite data from staging to datamart')

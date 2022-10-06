@@ -25,5 +25,14 @@ for x in listing['users']:
 #)
 
 
+    ## {
+       #     "name": "Zenodo",
+       #     "apiurl": "https://zenodo.org/api/records",
+       #     "payload": {
+       #         "q": "creators.affiliation:Rothamsted AND resource_type.type:(dataset OR software)",
+       #         "size": 1000
+       #     }
+       # }
+
 
 

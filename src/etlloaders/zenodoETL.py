@@ -10,7 +10,8 @@ class ZenodoETL: #, IDatasource
         self.col = self.mdb.getcollection(self.regData["name"])
 
     def executeETL(self):
-        self.extract()
+        #self.extract()
+        pass
 
     def executeKPI(self):
         dt = self.getDownloadsByDataType()

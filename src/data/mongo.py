@@ -12,25 +12,22 @@ class MongoRepository:
     def getdb(self):
         return self.db
 
-    def getcollection(self, sourcename):
-        collectionName = "raw" + sourcename
+    def getcollection(self, sourcename, etlLevel):
+        collectionName = etlLevel + sourcename
         return self.db[collectionName]
 
     def saveOne(self, tablename, data):
         print("saving to table " + tablename)
 
 
-    def saveMany(self, sourcename, datasets):
-        print("MongoDB saving many")
-        collectionName = "raw" + sourcename
+    def saveMany(self, targetCol, data, etlLevel):
+        collectionName = etlLevel + targetCol
+        collection = self.db[collectionName]   
+        b = list(data)
 
         if collectionName in self.db.list_collection_names():
-            print("Collection " + collectionName + " already exists")
-        else:
-            print("Collection " + collectionName + " does not exist")
+            collection.delete_many({}) 
 
-        collection = self.db[collectionName]   
-        collection.delete_many({}) 
-        collection.insert_many(datasets)
+        collection.insert_many(b)
 
 
