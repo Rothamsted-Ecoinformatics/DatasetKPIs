@@ -1,0 +1,51 @@
+{
+    "collection": [
+        {
+            "objectId": "1",
+            "attributes": {
+                "doi": "1",
+                "attribute": "1"
+            }
+        },
+        {
+            "objectId": "2",
+            "attributes": {
+                "doi": "2",
+                "attribute": "n"
+            }
+        },
+        {
+            "objectId": "2",
+            "attributes": {
+                "doi": "1",
+                "attribute": "1"
+            }
+        }
+    ]
+}
+
+
+
+
+
+{
+    "collection": [
+        {
+            "objectId": "2",
+            "attributes": {
+                "doi": "1",
+                "attribute": "1"
+            }
+        },
+        {
+            "objectId": "3",
+            "attributes": {
+                "doi": "2",
+                "attribute": "x"
+            }
+        }
+    ]
+}
+
+
+

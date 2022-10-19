@@ -12,7 +12,8 @@ mongodb = mdb()
 loaderClasses = GetEtlLoaders("./src/etlloaders")
 print("loader classes: " + str(loaderClasses))
 
-#USE Registry NAME as key for instantiating classes
+#USE Registry NAME as key for instantiating classescvls
+
 for i in registrydata['datasources']:
     loaderClassName = i["name"] + "ETL"
     _class = loaderClasses[loaderClassName]

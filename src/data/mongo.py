@@ -1,5 +1,5 @@
 
-from pymongo import MongoClient
+from pymongo import MongoClient, errors
 
 #     pwd='Dollar1slandfarm',
 #     roles=[{'role': 'readWrite', 'db': 'PublishedDatasets'}]
@@ -20,7 +20,7 @@ class MongoRepository:
         print("saving to table " + tablename)
 
 
-    def saveMany(self, targetCol, data, etlLevel):
+    def truncateAndInsert(self, targetCol, data, etlLevel):
         collectionName = etlLevel + targetCol
         collection = self.db[collectionName]   
         b = list(data)
@@ -29,5 +29,17 @@ class MongoRepository:
             collection.delete_many({}) 
 
         collection.insert_many(b)
+
+    def insert(self, targetCol, data, etlLevel):
+        collectionName = etlLevel + targetCol
+        collection = self.db[collectionName]   
+        b = list(data)
+        for doc in b:
+            try:
+                collection.insert_one(doc)
+            except errors.DuplicateKeyError:
+                # skip document because it already exists in new collection
+                continue
+        #collection.insert_many(b)
 
 

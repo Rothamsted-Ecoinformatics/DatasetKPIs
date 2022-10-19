@@ -2,7 +2,7 @@ import time
 import requests
 import json
 from bson.json_util import dumps
-
+import transformations.filters as filter
 
 class DataCiteETL: #, IDataSource
     def __init__(self, regData, mdb):
@@ -10,6 +10,7 @@ class DataCiteETL: #, IDataSource
         self.mdb = mdb
         self.rawcol = self.mdb.getcollection(self.regData["name"], "raw") #rawcollection
         self.stagingcol = self.mdb.getcollection(self.regData["name"], "staging") #rawcollection
+        self.dwCol = self.mdb.getcollection(self.regData["name"], "dw") #datawarehouse persistence collection
         self.clients = {
                 "cern.zenodo": "Zenodo",
                 "bl.rothres": "Rothamsted Research",
@@ -32,10 +33,31 @@ class DataCiteETL: #, IDataSource
     def executeETL(self):
         print('executing full etl pipeline for ' + self.regData["name"])
         #self.extract()
-        
-        #getKPIs(regData)
         self.transform()
         #load()
+        #getKPIs(regData)
+
+    def extract(self):
+        response = requests.get(self.regData["apiurl"], params=self.regData["payload"])
+        kpi_data = json.loads(response.text)
+        datasets = []
+        i = 1
+        for dataset in kpi_data['data']:
+            datasets.append(dataset)
+            i+=1   
+        self.mdb.truncateAndInsert(self.regData["name"], datasets, "raw")
+
+    def transform(self):
+        self.stagingcol.delete_many({})
+        filter.byFieldWithRegEx(self,  "attributes.creators.affiliation", "(?i)(Rothamsted)")
+        filter.byFieldWithRegEx(self, "attributes.creators.name", "(?i)(Rothamsted)")
+
+    def load(self):
+        
+        print('load datacite data from staging to datamart')
+
+        #copy from staging to datamart tables
+        #truncate staging tables
 
     def executeKPI(self):
         #self.getKPIs()
@@ -48,24 +70,6 @@ class DataCiteETL: #, IDataSource
                 "publicationCountByYearByClient": list(yc)
                 }
         return result
-
-    def extract(self):
-        start_time = time.time()
-        ##use api url and payload data from the registry to get raw data
-        print("apiurl : " + self.regData["apiurl"])
-        print("payload : " + str(self.regData["payload"]))
-        response = requests.get(self.regData["apiurl"], params=self.regData["payload"])
-        kpi_data = json.loads(response.text)
-
-        ##Granularity: split the results up into individual datasets.
-        datasets = []
-        i = 1
-        for dataset in kpi_data['data']:
-            datasets.append(dataset)
-            i+=1
-
-        ##Save all the datasets to the correct collection (overwrites existing).    
-        self.mdb.saveMany(self.regData["name"], datasets, "raw")
 
     def getPublicationCountByYear(self):
         publicationCountByYear = self.rawcol.aggregate([
@@ -120,31 +124,5 @@ class DataCiteETL: #, IDataSource
         return publicationCountByYearByClient
     
 
-    def transform(self):
-        #start_time = time.time()
-        #at this point self.stagingcol.find() is empty when the class is initialised
-        initialData = self.rawcol.find()
-        self.mdb.saveMany(self.regData["name"], initialData, "staging")
-        #at this point... the collection in the db is full, but self.stagingcol is still empty... 
-        #so the filter would not work if using self.staging col. 
-        #self.stagingcol = self.mdb.getcollection(self.regData["name"], "staging")
-        #now we have 'reinitialised' self.staging col. 
-        print("starting Filter")
-        self.FilterTest()
-        #self.FilterTest2()
-        #self.FilterTest3()
-        #read fromdatabase
 
-        #load into staging table 
-
-    def FilterTest(self):
-        filteredResults = self.stagingcol.find({ "attributes.creators.affiliation": {"$regex" : "(?i)(Rothamsted)"} })
-        self.mdb.saveMany(self.regData["name"], filteredResults, "staging")
-        pass
-
-
-    def load(self):
-        print('load datacite data from staging to datamart')
-        #copy from staging to datamart tables
-        #truncate staging tables
 
