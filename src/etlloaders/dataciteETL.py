@@ -8,9 +8,10 @@ class DataCiteETL: #, IDataSource
     def __init__(self, regData, mdb):
         self.regData = regData
         self.mdb = mdb
-        self.rawcol = self.mdb.getcollection(self.regData["name"], "raw") #rawcollection
-        self.stagingcol = self.mdb.getcollection(self.regData["name"], "staging") #rawcollection
-        self.dwCol = self.mdb.getcollection(self.regData["name"], "dw") #datawarehouse persistence collection
+        self.rawcol = self.mdb.getcollection(self.mdb.getrawdb(), self.regData["name"]) 
+        self.stagingcol = self.mdb.getcollection(self.mdb.getstagingdb(), self.regData["name"]) 
+        self.archivecol = self.mdb.getcollection(self.mdb.getarchivedb(), self.regData["name"])
+        self.reportingCol = self.mdb.getcollection(self.mdb.getreportingdb(), self.regData["name"]) #datawarehouse persistence collection
         self.clients = {
                 "cern.zenodo": "Zenodo",
                 "bl.rothres": "Rothamsted Research",
@@ -32,20 +33,24 @@ class DataCiteETL: #, IDataSource
 
     def executeETL(self):
         print('executing full etl pipeline for ' + self.regData["name"])
-        #self.extract()
-        self.transform()
+        #print(str(self.rawcol.name))
+        self.extract()
+        #self.transform()
         #load()
         #getKPIs(regData)
 
+    ###query apis and dum[p data into raw - arching old data.
     def extract(self):
         response = requests.get(self.regData["apiurl"], params=self.regData["payload"])
+        #TODO: Catch 500 error codes from server.
+
         kpi_data = json.loads(response.text)
         datasets = []
         i = 1
         for dataset in kpi_data['data']:
             datasets.append(dataset)
             i+=1   
-        self.mdb.truncateAndInsert(self.regData["name"], datasets, "raw")
+        self.mdb.archiveTruncateAndInsert(self.rawcol, datasets)
 
     def transform(self):
         self.stagingcol.delete_many({})
