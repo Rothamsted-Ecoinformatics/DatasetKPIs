@@ -1,14 +1,15 @@
-
 from os import truncate
 from pymongo import MongoClient, errors
 from datetime import datetime
+
 
 #     pwd='Dollar1slandfarm',
 #     roles=[{'role': 'readWrite', 'db': 'PublishedDatasets'}
 
 class MongoRepository:
     def __init__(self):
-        self.client = MongoClient("mongodb://datasetAppUser:Dollar1slandfarm@uranus.rothamsted.ac.uk:27017/?authMechanism=SCRAM-SHA-1&authSource=PublishedDatasets")
+        self.client = MongoClient(
+            "mongodb://datasetAppUser:Dollar1slandfarm@uranus.rothamsted.ac.uk:27017/?authMechanism=SCRAM-SHA-1&authSource=PublishedDatasets")
         self.defaultdb = self.client["PublishedDatasets"]
         self.rawdb = self.client["rawData"]
         self.stagingdb = self.client["stagingData"]
@@ -26,10 +27,9 @@ class MongoRepository:
 
     def getarchivedb(self):
         return self.archivedb
-    
+
     def getreportingdb(self):
         return self.reportingdb
-
 
     def getcollection(self, db, sourcename):
         collectionName = sourcename
@@ -38,34 +38,39 @@ class MongoRepository:
     def saveOne(self, tablename, data):
         print("saving to table " + tablename)
 
+    def archiveAndTruncate(self, sourceCol):
+        # archive the existing data from the target collection
+        try:
+            self.archivedb[str(sourceCol.name) + str(datetime.now()).replace(" ", "")].insert_many(sourceCol.find())
+        except errors.InvalidOperation:
+            pass
+
     def archiveTruncateAndInsert(self, targetCol, data):
-        #archive the existing data from the target collection
+        # archive the existing data from the target collection
         try:
             self.archivedb[str(targetCol.name) + str(datetime.now())].insert_many(targetCol.find())
         except errors.InvalidOperation:
             pass
-        #trucnate the target collection
+        # trucnate the target collection
         self.truncateAndInsert(targetCol, data)
 
     def truncateAndInsert(self, targetCol, data):
         b = list(data)
         try:
-            targetCol.delete_many({}) 
+            targetCol.delete_many({})
         except errors.CollectionInvalid:
-            #comnent
+            # comnent
             pass
         targetCol.insert_many(b)
 
-    def insert(self, targetCol, data, etlLevel):
-        collectionName = etlLevel + targetCol
-        collection = self.db[collectionName]   
+    def insert(self, targetCol, data):
+        # collectionName = etlLevel + targetCol
+        # collection = self.db[collectionName]
         b = list(data)
         for doc in b:
             try:
-                collection.insert_one(doc)
+                targetCol.insert_one(doc)
             except errors.DuplicateKeyError:
                 # skip document because it already exists in new collection
                 continue
-        #collection.insert_many(b)
-
-
+        # collection.insert_many(b)
