@@ -1,48 +1,49 @@
-from datetime import datetime
 import json
-import csv
+from datetime import datetime
 from data.mongo import MongoRepository as mdb
-from etlloaders.dataciteETL import DataCiteETL as dc
-from etlloaders.zenodoETL import ZenodoETL as zen
+from services.etlloaderservice import load as GetEtlLoaders
 
 
-##TODO: REFACTOR TO USE REGISTRY LOOP
-#SETUP
-registry = open('src/registry.json')
-registrydata = json.load(registry)
-mongodb = mdb()
+class KPIService:
 
+    # CONSTRUCTOR
+    def __init__(self):
+        # self.registry = open('src/registry.json')
+        self.registry = open('registry.json')
+        self.registrydata = json.load(self.registry)
+        self.mongodb = mdb()
+        self.reportingdb = self.mongodb.getreportingdb()
+        self.loaderClasses = GetEtlLoaders("etlloaders")
+        self.registry.close()
 
-dc = dc(registrydata["datasources"][0], mongodb)
-dcresults = dc.executeKPI()
-zen = zen(registrydata["datasources"][1], mongodb)
-zenresults = zen.executeKPI()
+    def report(self):
+        self.getDatasourceKPI("PublicationCountByYear")
+        self.getDatasourceKPI("PublicationCountByPublisher")
+        self.getDatasourceKPI("PublicationCountByYearByClient")
 
+    def getDatasourceKPI(self, KPIName):
+        # datawarehouse persistence collection
+        targetCol = self.mongodb.getcollection(self.reportingdb, KPIName)
 
-#CREATE CSV
-date = datetime.now().strftime("%Y_%m_%d-%I-%M-%S_%p")
-print(f"filename_{date}")
+        # GET A LIST OF ALL THE ETLLOADER CLASSES
+        datasources = []
+        func_name = "get" + KPIName
 
-file = open(f"src/archive/kpiData{date}.json" ,'w')
+        for i in self.registrydata['datasources']:
+            loaderClassName = i["name"] + "ETL"
+            _class = self.loaderClasses[loaderClassName]
+            loader = _class(i, self.mongodb)
+            func = getattr(loader, func_name)
+            try:
+                datasource = {"name": i["name"], "data": func()}
+                datasources.append(datasource)
 
-#WRITE JSON
-jsondata = {
-    "createdon": date,
-    "datasources":
-                    {
-                    "datacite": dcresults,
-                    "zenodo": zenresults
-                    }
-}
+            except:
+                print("Loader " + loaderClassName + " does not include get " + KPIName)
 
-file.write(json.dumps(jsondata, indent=2))
-file.close()
+        data = {
+            "createdon": datetime.now().strftime("%Y_%m_%d-%I-%M-%S_%p"),
+            "datasources": datasources
+        }
 
-
-
-#print(str(dcresults.keys()))
-#for x in dcresults["publicationCountByYear"]:
- #   print(x)
-
-
-
+        targetCol.insert_one(data)

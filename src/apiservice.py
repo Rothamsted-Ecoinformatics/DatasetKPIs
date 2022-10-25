@@ -4,12 +4,16 @@ from data.mongo import MongoRepository as mdb
 from services.etlloaderservice import load as GetEtlLoaders
 
 #initialise registry and db
-registry = open('src/registry.json')
+# registry = open('src/registry.json')
+from src.kpiservice import KPIService
+
+registry = open('registry.json')
 registrydata = json.load(registry)
 mongodb = mdb()
 
 #GET A LIST OF ALL THE ETLLOADER CLASSES
-loaderClasses = GetEtlLoaders("./src/etlloaders")
+# loaderClasses = GetEtlLoaders("./src/etlloaders")
+loaderClasses = GetEtlLoaders("etlloaders")
 print("loader classes: " + str(loaderClasses))
 
 #USE Registry NAME as key for instantiating classescvls
@@ -22,7 +26,9 @@ for i in registrydata['datasources']:
 
 registry.close()
 
-
+kpiService = KPIService()
+# kpiService.publicationCountByYear()
+kpiService.report()
 
 # dc = dc(registrydata["datasources"][0], mongodb)
 # dc.executeETL()

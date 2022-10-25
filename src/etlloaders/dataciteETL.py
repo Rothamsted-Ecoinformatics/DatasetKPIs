@@ -1,7 +1,6 @@
+import json
 import time
 import requests
-import json
-from bson.json_util import dumps
 import src.transformations.filters as filter
 
 
@@ -36,8 +35,8 @@ class DataCiteETL:  # , IDataSource
     def executeETL(self):
         print('executing full etl pipeline for ' + self.regData["name"])
         # print(str(self.rawcol.name))
-        self.extract()
-        self.transform()
+        # self.extract()
+        # self.transform()
         # load()
         # getKPIs(regData)
 
@@ -79,7 +78,7 @@ class DataCiteETL:  # , IDataSource
         return result
 
     def getPublicationCountByYear(self):
-        publicationCountByYear = self.rawcol.aggregate([
+        publicationCountByYear = self.stagingcol.aggregate([
             {
                 "$group": {
                     "_id": {
@@ -96,10 +95,10 @@ class DataCiteETL:  # , IDataSource
         ])
         # for x in publicationCountByYear:
         #   print(x)
-        return publicationCountByYear
+        return list(publicationCountByYear)
 
     def getPublicationCountByPublisher(self):
-        publicationCountByPublisher = self.rawcol.aggregate([
+        publicationCountByPublisher = self.stagingcol.aggregate([
             {
                 "$group": {
                     "_id": "$relationships.client.data.id",
@@ -108,11 +107,11 @@ class DataCiteETL:  # , IDataSource
             },
             {"$sort": {"num_datasets": -1}}
         ])
-        return publicationCountByPublisher
+        return list(publicationCountByPublisher)
 
     def getPublicationCountByYearByClient(self):
         start_time = time.time()
-        publicationCountByYearByClient = self.rawcol.aggregate([
+        publicationCountByYearByClient = self.stagingcol.aggregate([
             {
                 "$group": {
                     "_id": {
@@ -128,4 +127,4 @@ class DataCiteETL:  # , IDataSource
             },
             {"$sort": {"_id.year": 1, "num_datasets": -1}}
         ])
-        return publicationCountByYearByClient
+        return list(publicationCountByYearByClient)
