@@ -1,16 +1,22 @@
 import time
 import requests
 import json
+import src.transformations.filters as filter
 
 
-class ZenodoETL: #, IDatasource
+class ZenodoETL:  # , IDatasource
     def __init__(self, regData, mdb):
         self.regData = regData
         self.mdb = mdb
-        self.col = self.mdb.getcollection(self.regData["name"])
+        # self.col = self.mdb.getcollection(self.regData["name"])
+        self.rawcol = self.mdb.getcollection(self.mdb.getrawdb(), self.regData["name"])
+        self.stagingcol = self.mdb.getcollection(self.mdb.getstagingdb(), self.regData["name"])
+        self.archivecol = self.mdb.getcollection(self.mdb.getarchivedb(), self.regData["name"])
+        self.reportingCol = self.mdb.getcollection(self.mdb.getreportingdb(),
+                                                   self.regData["name"])  # datawarehouse persistence collection
 
     def executeETL(self):
-        #self.extract()
+        # self.extract()
         pass
 
     def executeKPI(self):
@@ -23,60 +29,69 @@ class ZenodoETL: #, IDatasource
         return result
 
     def extract(self):
-        start_time = time.time()
+        # start_time = time.time()
+        print("Calling " + self.regData["apiurl"] + ": " + self.regData["name"])
         response = requests.get(self.regData["apiurl"], params=self.regData["payload"])
+        print(response.status_code)
 
         kpi_data = json.loads(response.text)
 
         datasets = []
         i = 1
         for dataset in kpi_data['hits']['hits']:
-            ##print("Ddataset: " + str(i) + " doi is " + dataset['doi'])
             datasets.append(dataset)
-            #print("Dataset " + str(i) + ". type = " + str(type(data)))
-            #collection.insert_one(data)
-            i+=1
-        
-        print("saving many from " + self.regData["name"])
-        self.mdb.saveMany(self.regData["name"], datasets)
+            i += 1
+        self.mdb.truncateAndInsert(self.rawcol, datasets)
 
+    def transform(self):
+        self.mdb.archiveAndTruncate(self.stagingcol)
+        filter.byFieldWithRegEx(self, "metadata.creators.affiliation", "(?i)(Rothamsted)")
+        filter.byFieldWithRegEx(self, "metadata.creators.name", "(?i)(Rothamsted)")
 
     def getDownloadsByDataType(self):
-        downloadsByDataType = self.col.aggregate([
+        downloadsByDataType = self.stagingcol.aggregate([
             {
                 "$group": {
                     "_id": "$metadata.resource_type.type",
-                        "count": {"$sum": 1},
-                        "downloads": {"$sum": "$stats.downloads"} 
+                    "count": {"$sum": 1},
+                    "downloads": {"$sum": "$stats.downloads"}
                 }
-            }    
+            }
         ])
-        return downloadsByDataType
+        return list(downloadsByDataType)
 
     def getDownloadsByTitle(self):
-        downloadsByTitle = self.col.find({},{ "_id": 0, "metadata.title": 1, "stats.downloads": 1 })
-        print("ZENODO: DOWNLOADS BY TITLE")
-        mydict = {
-            "1" :{
-                    "title": "",
-                    "download": 98,
-                    "views": 98
-                },
-            "2" :{
-                "title": "",
-                "download": 98,
-                "views": 98
-            }
-
-        }
+        downloadsByTitle = self.stagingcol.find({}, {"_id": 0, "metadata.title": 1, "stats.downloads": 1})
+        # print("ZENODO: DOWNLOADS BY TITLE")
+        mydict = {}
+        resultList = []
         i = 0
         for x in downloadsByTitle:
-            mydict[str(i)] = {
-                                "title": x['metadata']['title'],
-                                "downloads": x['stats']['downloads']
-                                }
+            mydict = {
+                "title": x['metadata']['title'],
+                "downloads": x['stats']['downloads']
+            }
+            resultList.append(mydict)
 
-            i+=1
-            
-        return mydict
+            i += 1
+        return resultList
 
+    def getPublicationCountByYear(self):
+        publicationCountByYear = self.stagingcol.aggregate([
+            {
+                "$group": {
+                    "_id": {
+                        "$year": {"$dateFromString":
+                            {
+                                "dateString": "$created"
+                            }
+                        }
+                    },
+                    "num_datasets": {"$sum": 1}
+                }
+            },
+            {"$sort": {"_id": 1}}
+        ])
+        # for x in publicationCountByYear:
+        #   print(x)
+        return list(publicationCountByYear)

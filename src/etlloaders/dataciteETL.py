@@ -42,9 +42,10 @@ class DataCiteETL:  # , IDataSource
 
     ###query apis and dump data into raw - arching old data.
     def extract(self):
+        print("Calling " + self.regData["apiurl"] + ": " + self.regData["name"])
         response = requests.get(self.regData["apiurl"], params=self.regData["payload"])
         # TODO: Catch 500 error codes from server.
-
+        print(response.status_code)
         kpi_data = json.loads(response.text)
         datasets = []
         i = 1
@@ -65,17 +66,17 @@ class DataCiteETL:  # , IDataSource
         # copy from staging to datamart tables
         # truncate staging tables
 
-    def executeKPI(self):
-        # self.getKPIs()
-        y = self.getPublicationCountByYear()
-        p = self.getPublicationCountByPublisher()
-        yc = self.getPublicationCountByYearByClient()
-        result = {
-            "publicationCountByYear": list(y),
-            "publicationCountByPublisher": list(p),
-            "publicationCountByYearByClient": list(yc)
-        }
-        return result
+    # def executeKPI(self):
+    #     # self.getKPIs()
+    #     y = self.getPublicationCountByYear()
+    #     p = self.getPublicationCountByPublisher()
+    #     yc = self.getPublicationCountByYearByClient()
+    #     result = {
+    #         "publicationCountByYear": list(y),
+    #         "publicationCountByPublisher": list(p),
+    #         "publicationCountByYearByClient": list(yc)
+    #     }
+    #     return result
 
     def getPublicationCountByYear(self):
         publicationCountByYear = self.stagingcol.aggregate([
@@ -107,7 +108,17 @@ class DataCiteETL:  # , IDataSource
             },
             {"$sort": {"num_datasets": -1}}
         ])
-        return list(publicationCountByPublisher)
+
+        resultList = list(publicationCountByPublisher)
+
+        for result in resultList:
+            clientName = ''
+            if result['_id'] in self.clients:
+                clientName = self.clients[result['_id']]
+
+            result['client_name'] = clientName
+
+        return resultList
 
     def getPublicationCountByYearByClient(self):
         start_time = time.time()
@@ -120,11 +131,21 @@ class DataCiteETL:  # , IDataSource
                                 "dateString": "$attributes.created"
                             }
                         }},
-                        "client": "$relationships.client.data.id"
+                        "client_id": "$relationships.client.data.id"
                     },
                     "num_datasets": {"$sum": 1}
                 }
             },
             {"$sort": {"_id.year": 1, "num_datasets": -1}}
         ])
-        return list(publicationCountByYearByClient)
+
+        resultList = list(publicationCountByYearByClient)
+
+        for result in resultList:
+            clientName = ''
+            if result['_id']['client_id'] in self.clients:
+                clientName = self.clients[result['_id']['client_id']]
+
+            result['_id']['client_name'] = clientName
+
+        return resultList

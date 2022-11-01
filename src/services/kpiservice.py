@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
-from data.mongo import MongoRepository as mdb
-from services.etlloaderservice import load as GetEtlLoaders
+from src.data.mongo import MongoRepository as mdb
+from src.services.etlloaderservice import load as GetEtlLoaders
 
 
 class KPIService:
@@ -9,7 +9,7 @@ class KPIService:
     # CONSTRUCTOR
     def __init__(self):
         # self.registry = open('src/registry.json')
-        self.registry = open('registry.json')
+        self.registry = open('../src/registry.json')
         self.registrydata = json.load(self.registry)
         self.mongodb = mdb()
         self.reportingdb = self.mongodb.getreportingdb()
@@ -20,6 +20,8 @@ class KPIService:
         self.getDatasourceKPI("PublicationCountByYear")
         self.getDatasourceKPI("PublicationCountByPublisher")
         self.getDatasourceKPI("PublicationCountByYearByClient")
+        self.getDatasourceKPI("DownloadsByDataType")
+        self.getDatasourceKPI("DownloadsByTitle")
 
     def getDatasourceKPI(self, KPIName):
         # datawarehouse persistence collection
@@ -33,8 +35,8 @@ class KPIService:
             loaderClassName = i["name"] + "ETL"
             _class = self.loaderClasses[loaderClassName]
             loader = _class(i, self.mongodb)
-            func = getattr(loader, func_name)
             try:
+                func = getattr(loader, func_name)
                 datasource = {"name": i["name"], "data": func()}
                 datasources.append(datasource)
 
