@@ -1,6 +1,10 @@
-from src.services.kpiservice import KPIService
-from src.services import apiservice
+from services.kpiservice import KPIService
+from services import apiservice
+from services.testFilePath import TestRegistryPath
 
-# apiservice.execute()
-kpiService = KPIService()
-kpiService.report()
+# if TestRegistryPath():
+#     apiservice.execute()
+#     kpiService = KPIService()
+#     kpiService.report()
+
+print("Registry path is " + str(TestRegistryPath()))
