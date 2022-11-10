@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
-from src.data.mongo import MongoRepository as mdb
-from src.services.etlloaderservice import load as GetEtlLoaders
+from data.mongo import MongoRepository as mdb
+from services.etlloaderservice import load as GetEtlLoaders
 
 
 class KPIService:
