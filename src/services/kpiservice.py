@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 from data.mongo import MongoRepository as mdb
 from services.etlloaderservice import load as GetEtlLoaders
+import config
 
 
 class KPIService:
@@ -9,7 +10,8 @@ class KPIService:
     # CONSTRUCTOR
     def __init__(self):
         # self.registry = open('src/registry.json')
-        self.registry = open('../src/registry.json')
+        # self.registry = open('../src/registry.json')
+        self.registry = open(config.registryPath)
         self.registrydata = json.load(self.registry)
         self.mongodb = mdb()
         self.reportingdb = self.mongodb.getreportingdb()

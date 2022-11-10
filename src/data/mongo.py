@@ -1,6 +1,7 @@
 from os import truncate
 from pymongo import MongoClient, errors
 from datetime import datetime
+import config
 
 
 #     pwd='Dollar1slandfarm',
@@ -8,8 +9,9 @@ from datetime import datetime
 
 class MongoRepository:
     def __init__(self):
-        self.client = MongoClient(
-            "mongodb://datasetAppUser:Dollar1slandfarm@uranus.rothamsted.ac.uk:27017/?authMechanism=SCRAM-SHA-1&authSource=PublishedDatasets")
+        # self.client = MongoClient(
+        #     "mongodb://datasetAppUser:Dollar1slandfarm@uranus.rothamsted.ac.uk:27017/?authMechanism=SCRAM-SHA-1&authSource=PublishedDatasets")
+        self.client = MongoClient(config.mongoConnectionString)
         self.defaultdb = self.client["PublishedDatasets"]
         self.rawdb = self.client["rawData"]
         self.stagingdb = self.client["stagingData"]

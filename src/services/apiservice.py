@@ -1,11 +1,12 @@
 
 import json
-
 from data.mongo import MongoRepository as mdb
 from services.etlloaderservice import load as GetEtlLoaders
+import config
 
 def execute():
-    registry = open('../src/registry.json')
+    # registry = open('../src/registry.json')
+    registry = open(config.registryPath)
     registrydata = json.load(registry)
     mongodb = mdb()
 
