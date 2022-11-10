@@ -1,6 +1,6 @@
 import datetime
 
-from src.data.mongo import MongoRepository as mdb
+from data.mongo import MongoRepository as mdb
 import json
 
 
