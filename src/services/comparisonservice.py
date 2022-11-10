@@ -1,8 +1,4 @@
 import datetime
-<<<<<<< HEAD
-
-=======
->>>>>>> 887b60c8a528dd68f6a42a3250e08768472d49b2
 from data.mongo import MongoRepository as mdb
 import json
 
