@@ -19,12 +19,12 @@ class KPIService:
         self.registry.close()
 
     def report(self):
-        self.getDatasourceKPI("PublicationCountByYear")
-        self.getDatasourceKPI("PublicationCountByPublisher")
-        self.getDatasourceKPI("PublicationCountByYearByClient")
-        self.getDatasourceKPI("DownloadsByDataType")
-        self.getDatasourceKPI("DownloadsByTitle")
-        ##self.getDatasourceKPI("PublicationsPerMonth")
+        # self.getDatasourceKPI("PublicationCountByYear")
+        # self.getDatasourceKPI("PublicationCountByPublisher")
+        # self.getDatasourceKPI("PublicationCountByYearByClient")
+        # self.getDatasourceKPI("DownloadsByDataType")
+        # self.getDatasourceKPI("DownloadsByTitle")
+        self.getDatasourceKPI("PublicationsByMonth")
 
     def getDatasourceKPI(self, KPIName):
         # datawarehouse persistence collection

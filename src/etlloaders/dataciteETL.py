@@ -148,3 +148,18 @@ class DataCiteETL:  # , IDataSource
             result['_id']['client_name'] = clientName
 
         return resultList
+
+    def getPublicationsByMonth(self):
+        publicationCountByMonth = self.stagingcol.aggregate([
+            {
+                "$group": {
+                    "_id": { "year": { "$year": {"$dateFromString": {"dateString": "$attributes.created"}} }, 
+                    "month": { "$month": {"$dateFromString": {"dateString": "$attributes.created"}}}},
+                    "num_datasets": {"$sum": 1}
+                }
+            },
+            {"$sort": {"_id": 1}}
+        ])
+        # for x in publicationCountByMonth:
+        #     print(x)
+        return list(publicationCountByMonth)
