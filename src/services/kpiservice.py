@@ -15,7 +15,7 @@ class KPIService:
         self.registrydata = json.load(self.registry)
         self.mongodb = mdb()
         self.reportingdb = self.mongodb.getreportingdb()
-        self.loaderClasses = GetEtlLoaders("etlloaders")
+        self.loaderClasses = GetEtlLoaders("src/etlloaders")
         self.registry.close()
 
     def report(self):
@@ -24,6 +24,7 @@ class KPIService:
         self.getDatasourceKPI("PublicationCountByYearByClient")
         self.getDatasourceKPI("DownloadsByDataType")
         self.getDatasourceKPI("DownloadsByTitle")
+        ##self.getDatasourceKPI("PublicationsPerMonth")
 
     def getDatasourceKPI(self, KPIName):
         # datawarehouse persistence collection

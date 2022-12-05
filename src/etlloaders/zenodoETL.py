@@ -1,7 +1,7 @@
 import time
 import requests
 import json
-import src.transformations.filters as filter
+import transformations.filters as filter
 
 
 class ZenodoETL:  # , IDatasource
@@ -31,7 +31,7 @@ class ZenodoETL:  # , IDatasource
     def extract(self):
         # start_time = time.time()
         print("Calling " + self.regData["apiurl"] + ": " + self.regData["name"])
-        response = requests.get(self.regData["apiurl"], params=self.regData["payload"])
+        response = requests.get(self.regData["apiurl"], json=self.regData["payload"])
         print(response.status_code)
 
         kpi_data = json.loads(response.text)

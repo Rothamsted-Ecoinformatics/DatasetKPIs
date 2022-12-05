@@ -20,7 +20,7 @@ def extract():
     collection = db['FigshareRAW']
     collection.delete_many({}) 
     #call api
-    response = requests.get(url, params=payload)
+    response = requests.get(url, json=payload)
     #print(response.json())
     kpi_data = json.loads(response.text)
 

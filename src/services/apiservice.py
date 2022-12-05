@@ -12,7 +12,7 @@ def execute():
 
     #GET A LIST OF ALL THE ETLLOADER CLASSES
     # loaderClasses = GetEtlLoaders("./src/etlloaders")
-    loaderClasses = GetEtlLoaders("etlloaders")
+    loaderClasses = GetEtlLoaders("src/etlloaders")
     print("loader classes: " + str(loaderClasses))
 
     #USE Registry NAME as key for instantiating classescvls
@@ -22,7 +22,9 @@ def execute():
         _class = loaderClasses[loaderClassName]
         loader = _class(i, mongodb)
         # loader.executeETL()
+        print("Extracting from " + i["name"] + "'s api into RAW")
         loader.extract()
+        print("Transforming from " + i["name"] + "'s RAW into Staging, with Archiving")
         loader.transform()
 
     registry.close()

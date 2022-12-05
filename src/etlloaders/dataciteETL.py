@@ -1,8 +1,7 @@
 import json
 import time
 import requests
-import src.transformations.filters as filter
-
+import transformations.filters as filter
 
 class DataCiteETL:  # , IDataSource
     def __init__(self, regData, mdb):
@@ -43,7 +42,7 @@ class DataCiteETL:  # , IDataSource
     ###query apis and dump data into raw - arching old data.
     def extract(self):
         print("Calling " + self.regData["apiurl"] + ": " + self.regData["name"])
-        response = requests.get(self.regData["apiurl"], params=self.regData["payload"])
+        response = requests.get(self.regData["apiurl"], json=self.regData["payload"])
         # TODO: Catch 500 error codes from server.
         print(response.status_code)
         kpi_data = json.loads(response.text)
