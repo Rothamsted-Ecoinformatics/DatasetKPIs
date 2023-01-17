@@ -4,7 +4,7 @@ from services.kpiservice import KPIService
 
 if test.TestRegistryPath():
     #print("Running API service")
-    #apiservice.execute()
+    apiservice.execute()
     kpiService = KPIService()
     print("Running KPI service reporting")
     kpiService.report()
